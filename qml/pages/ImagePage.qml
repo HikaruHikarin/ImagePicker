@@ -25,62 +25,56 @@ Page {
 
         // Comment the following 4 lines and uncomment the lines below to scale without state saving
         transform: Scale { id: imgScale; xScale: mouseArea.scaleFactor;
-                            yScale: mouseArea.scaleFactor;
-                            origin.x: mouseArea.initPositionX;
-                            origin.y: mouseArea.initPositionY}
+            yScale: mouseArea.scaleFactor;
+            origin.x: mouseArea.initPositionX;
+            origin.y: mouseArea.initPositionY}
 
-//        transform: Scale { id: imgScale}
-//        states: State {
-//                    name: "active"; when: mouseArea.pressed
-//                    PropertyChanges { target: imgScale;
-//                        xScale: mouseArea.scaleFactor;
-//                        yScale: mouseArea.scaleFactor;
-//                        origin.x: mouseArea.initPositionX;
-//                        origin.y: mouseArea.initPositionY}
-//                }
-
-
+        //        transform: Scale { id: imgScale}
+        //        states: State {
+        //                    name: "active"; when: mouseArea.pressed
+        //                    PropertyChanges { target: imgScale;
+        //                        xScale: mouseArea.scaleFactor;
+        //                        yScale: mouseArea.scaleFactor;
+        //                        origin.x: mouseArea.initPositionX;
+        //                        origin.y: mouseArea.initPositionY}
+        //                }
 
 
 
-    // Processes mouse actions, counts scale factor
-    MouseArea {
-        id: mouseArea
-        property bool isScaling: false
-        property real initPositionY
-        property real initPositionX
-        property real currentPosition
-        property real scaleFactor: 1
-        anchors.fill: parent
 
-        // Remember initial position of mouse
-        onPressed: {
-            isScaling = true
-            initPositionX = mouse.x
-            initPositionY = mouse.y
-            currentPosition = mouse.y
-        }
 
-        // Go back to initial scale
-        onReleased: {
-            isScaling = false
-        }
+        // Processes mouse actions, counts scale factor
+        MouseArea {
+            id: mouseArea
+            property bool isScaling: false
+            property real initPositionY
+            property real initPositionX
+            property real currentPosition: 0
+            property real scaleFactor: 1
+            anchors.fill: parent
 
-        // If mouse goes up, scale up, else scale down
-        onPositionChanged: {
-            if (isScaling) {
 
-                var dPosition = mouse.y - currentPosition
-                if(dPosition < 0.0 && scaleFactor < 10) scaleFactor+= 0.1
-                else if(scaleFactor > 0.5) scaleFactor-=0.1
-                currentPosition = mouse.y
+            // Reset current position
+            onReleased: {
+                currentPosition = 0
             }
-        }
 
-        onCanceled: {
-            isScaling = false
+            // If mouse started to go up, scale up, else scale down
+            onPositionChanged: {
+                if(currentPosition==0) {
+                    initPositionX = mouse.x
+                    initPositionY = mouse.y
+                    currentPosition = mouse.y
+                } else {
+                    var dPosition = mouse.y - currentPosition
+                    if(dPosition < 0.0 && scaleFactor < 10) scaleFactor+= 0.1
+                    else if(scaleFactor > 0.5) scaleFactor-=0.1
+                    currentPosition = mouse.y
+                }
+
+            }
+
         }
-    }
 
     }
 
