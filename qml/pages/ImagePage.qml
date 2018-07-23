@@ -46,7 +46,6 @@ Page {
         // Processes mouse actions, counts scale factor
         MouseArea {
             id: mouseArea
-            property bool isScaling: false
             property real initPositionY
             property real initPositionX
             property real currentPosition: 0
